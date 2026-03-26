@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<calendar>
+    <contacts>
+        <contact>
+            <name>Klaudia</name>
+            <phoneNumber>0</phoneNumber>
+        </contact>
+        <contact>
+            <name>Barbara</name>
+            <phoneNumber>24124</phoneNumber>
+        </contact>
+        <contact>
+            <name>Ola</name>
+            <phoneNumber>24124</phoneNumber>
+        </contact>
+        <contact>
+            <name>Ala</name>
+            <phoneNumber>142422</phoneNumber>
+        </contact>
+        <contact>
+            <name>Monika</name>
+            <phoneNumber>420666</phoneNumber>
+        </contact>
+        <contact>
+            <name>Zuzanna</name>
+            <phoneNumber>421373</phoneNumber>
+        </contact>
+        <contact>
+            <name>Kasia</name>
+            <phoneNumber>544566</phoneNumber>
+        </contact>
+        <contact>
+            <name>Joanna</name>
+            <phoneNumber>4565463</phoneNumber>
+        </contact>
+        <contact>
+            <name>Ela</name>
+            <phoneNumber>4685486</phoneNumber>
+        </contact>
+        <contact>
+            <name>Sasha</name>
+            <phoneNumber>748596231</phoneNumber>
+        </contact>
+    </contacts>
+    <events>
+        <event>
+            <date>2000-01-01</date>
+            <description>Nikt się nie dowie*</description>
+        </event>
+        <event>
+            <date>2002-03-11</date>
+            <description>testowanko 134</description>
+        </event>
+        <event>
+            <date>2002-11-16</date>
+            <description>Litwo ojczyzno moja</description>
+        </event>
+        <event>
+            <date>2003-03-10</date>
+            <description>Opis 134</description>
+        </event>
+        <event>
+            <date>2007-03-22</date>
+            <description>Ile cię trzeba kochać</description>
+        </event>
+        <event>
+            <date>2010-04-01</date>
+            <description>wydarzenie 3</description>
+        </event>
+        <event>
+            <date>2010-05-04</date>
+            <description>wydarzenie 2</description>
+        </event>
+        <event>
+            <date>2012-04-01</date>
+            <description>opisik 2</description>
+        </event>
+        <event>
+            <date>2022-03-10</date>
+            <description>Opis 136</description>
+        </event>
+        <event>
+            <date>2026-03-14</date>
+            <description>Zdarzenie 1</description>
+        </event>
+    </events>
+</calendar>
