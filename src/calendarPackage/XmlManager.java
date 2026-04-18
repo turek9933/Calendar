@@ -1,0 +1,147 @@
+package calendarPackage;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.stream.StreamResult;
+
+import java.io.File;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+
+public class XmlManager {
+	public static void load(ArrayList<Contact> contacts, ArrayList<Event> events, String fileName) throws Exception {
+		Document doc = createDocument(fileName);
+		
+		loadContactArray(contacts, doc);
+		loadEventArray(events, doc);
+	}
+	
+	public static void save(ArrayList<Contact> contacts, ArrayList<Event> events) throws Exception {
+	    Document doc = createDocument();
+
+	    // Stworzenie elementu głównego i dodanie go do dokumentu
+	    Element root = doc.createElement("calendar");
+	    doc.appendChild(root);
+
+	    // Dodanie elementów kontaktów oraz zdarzeń
+	    saveContacts(contacts, root, doc);
+	    saveEvents(events, root, doc);
+
+	    // Renderowanie i zapis drzewa DOM do pliku
+	    TransformerFactory transformerFactory = TransformerFactory.newInstance();
+	    Transformer transformer = transformerFactory.newTransformer();
+
+	    // Ustawienia do polskich znaków
+	    transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+	    transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+
+	    DOMSource source = new DOMSource(doc);
+		StreamResult result = new StreamResult(new File("calendar.xml"));
+
+	    transformer.transform(source, result);
+	}
+	
+	private static Document createDocument() throws Exception {
+	    // Stworzenie pustego drzewa DOM - obiektowy model dokumentu
+	    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	    DocumentBuilder builder = factory.newDocumentBuilder();
+	    return builder.newDocument();
+	}
+	private static Document createDocument(String path) throws Exception {
+	    // Stworzenie pustego drzewa DOM - obiektowy model dokumentu i wczytanie danych z pliku
+	    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	    DocumentBuilder builder = factory.newDocumentBuilder();
+	    return builder.parse(new File(path));
+	}
+
+	private static void loadContactArray(ArrayList<Contact> contacts, Document doc) throws Exception {
+		Element contactsElement = (Element) doc.getElementsByTagName("contacts").item(0);
+	    NodeList contactNodes = contactsElement.getElementsByTagName("contact");
+	    
+	    for (int i = 0; i < contactNodes.getLength(); i++) {
+	    	Element contactElement = (Element) contactNodes.item(i);
+	    	
+	    	int id = Integer.parseInt(contactElement.getElementsByTagName("id").item(0).getTextContent());
+	    	String name = contactElement.getElementsByTagName("name").item(0).getTextContent();
+	    	String surname = contactElement.getElementsByTagName("surname").item(0).getTextContent();
+	    	String phoneNumber = contactElement.getElementsByTagName("phoneNumber").item(0).getTextContent();
+
+	    	contacts.add(new Contact(id, name, surname, phoneNumber));
+	    }
+	}
+
+	private static void loadEventArray(ArrayList<Event> events, Document doc) throws Exception {
+		Element eventsElement = (Element) doc.getElementsByTagName("events").item(0);
+	    NodeList eventNodes = doc.getElementsByTagName("event");
+	    
+	    for (int i = 0; i < eventNodes.getLength(); i++) {
+	    	Element eventElement = (Element) eventNodes.item(i);
+	    	
+	    	int id = Integer.parseInt(eventElement.getElementsByTagName("id").item(0).getTextContent());
+	    	LocalDateTime date = LocalDateTime.parse(eventElement.getElementsByTagName("date").item(0).getTextContent());
+	    	String description = eventElement.getElementsByTagName("description").item(0).getTextContent();
+
+	    	events.add(new Event(id, date, description));
+	    }
+	}
+	
+	private static void saveContacts(ArrayList<Contact> contacts, Element root, Document doc) throws Exception {
+		Element contactRoot = doc.createElement("contacts");
+		root.appendChild(contactRoot);
+		
+		for (Contact c : contacts) {
+	    	Element contactElement = doc.createElement("contact");
+
+	    	Element id = doc.createElement("id");
+	    	id.setTextContent(Integer.toString(c.getId()));
+	    	contactElement.appendChild(id);
+
+	    	Element name = doc.createElement("name");
+	    	name.setTextContent(c.getName());
+	    	contactElement.appendChild(name);
+
+	    	Element surname = doc.createElement("surname");
+	    	surname.setTextContent(c.getSurname());
+	    	contactElement.appendChild(surname);
+	    	
+	    	Element phoneNumber = doc.createElement("phoneNumber");
+	    	phoneNumber.setTextContent(c.getPhoneNumber());
+	    	contactElement.appendChild(phoneNumber);
+
+	    	contactRoot.appendChild(contactElement);
+	    }
+	}
+
+	private static void saveEvents(ArrayList<Event> events, Element root, Document doc) throws Exception {
+		Element eventRoot = doc.createElement("events");
+		root.appendChild(eventRoot);
+		
+		for (Event e : events) {
+	    	Element eventElement = doc.createElement("event");
+
+	    	Element id = doc.createElement("id");
+	    	id.setTextContent(Integer.toString(e.getId()));
+	    	eventElement.appendChild(id);
+
+	    	Element date = doc.createElement("date");
+//	    	TODO pilnować w przypadku zmiany klasy Event
+	    	date.setTextContent(e.getDateString());
+	    	eventElement.appendChild(date);
+	    	
+	    	Element description = doc.createElement("description");
+	    	description.setTextContent(e.getDescription());
+	    	eventElement.appendChild(description);
+
+	    	eventRoot.appendChild(eventElement);
+	    }
+	}
+}
