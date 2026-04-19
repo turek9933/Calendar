@@ -82,6 +82,40 @@ public class Contact implements Comparable<Contact> {
 		}
 		System.out.println("Brak kontaktu o id: " + id);
 	}
+	
+	public static void editContact(ArrayList<Contact> contacts, int id, String newName, String newSurname, String newPhoneNumber) {
+		for (Contact contact : contacts) {
+			if (contact.getId() == id) {
+				
+				String oldName = contact.getName();
+				String oldSurname = contact.getSurname();
+				String oldPhoneNumber = contact.getPhoneNumber();
+
+				for (Contact other : contacts) {
+					if (other.getPhoneNumber().equals(newPhoneNumber) && other.getId() != id) {
+						System.out.println("A contact with this phone number already exists.");
+						System.out.println("Existing contact:");
+						System.out.println(other);
+						return;
+					}
+				}
+				
+				System.out.println("Contact before edit:");
+				System.out.println("[Contact] Id: " + contact.getId() + " Name: " + oldName + " Surname: " + oldSurname + " Phone number: " + oldPhoneNumber);
+				
+				contact.setName(newName);
+				contact.setSurname(newSurname);
+				contact.setPhoneNumber(newPhoneNumber);
+
+				System.out.println("Contact after edit:");
+				System.out.println(contact);
+				return;
+			}
+		}
+
+		System.out.println("Contact with id " + id + " not found.");
+	}
+	
 	@Override
 	public String toString() {
 		return "[Contact] Id: " + this.id + " Name: " + this.name + " Surname: " + this.surname + " Phone number: " + this.phoneNumber;

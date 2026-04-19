@@ -2,11 +2,11 @@ package calendarPackage;
 
 import java.util.Comparator;
 
-public class ComparatorDate implements Comparator<Event> {
+public class ComparatorId implements Comparator<Event> {
 
 	@Override
 	public int compare(Event o1, Event o2) {
-		return o1.getDate().compareTo(o2.getDate());
+		return Integer.compare(o1.getId(), o2.getId());	
 	}
-
+	
 }
