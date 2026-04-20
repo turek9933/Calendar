@@ -45,6 +45,11 @@ public class Main {
 		Event.printEvents(events);
 		
 		System.out.println();
+		System.out.println("Edycja zdarzenia o id 3");
+		Event.editEvent(events, 3, LocalDateTime.of(2027, 9, 12, 15, 30), "tenis");;
+		Event.printEvents(events);
+		
+		System.out.println();
 		System.out.println("Zapis do pliku zmodyfikowanych danych");
 		XmlManager.save(contacts, events);
 	}

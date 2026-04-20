@@ -74,6 +74,28 @@ public class Event implements Comparable<Event> {
 		System.out.println("Brak zdarzenia o id: " + id);
 	}
 	
+	public static void editEvent(ArrayList<Event> events, int id, LocalDateTime newDate, String newDescription) {
+		for (Event event : events) {
+			if (event.getId() == id) {
+
+				LocalDateTime oldDate = event.getDate();
+				String oldDescription = event.getDescription();
+
+				System.out.println("Event before edit:");
+				System.out.println("[Event] Id: " + event.getId() + " Date: " + oldDate + " Description: " + oldDescription);
+
+				event.setDate(newDate);
+				event.setDescription(newDescription);
+
+				System.out.println("Event after edit:");
+				System.out.println(event);
+				return;
+			}
+		}
+
+		System.out.println("Event with id " + id + " not found.");
+	}
+	
 	@Override
 	public String toString() {
 		return "[Event] Id: " + this.id + " Date: " + this.date + " Description: " + this.description;

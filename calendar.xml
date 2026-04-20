@@ -8,13 +8,13 @@
             <phoneNumber>500123456</phoneNumber>
         </contact>
         <contact>
-            <id>1</id>
+            <id>2</id>
             <name>Jan</name>
             <surname>Kowalski</surname>
             <phoneNumber>501234567</phoneNumber>
         </contact>
         <contact>
-            <id>2</id>
+            <id>1</id>
             <name>Anna</name>
             <surname>Nowak</surname>
             <phoneNumber>502345678</phoneNumber>
@@ -70,8 +70,8 @@
         </event>
         <event>
             <id>3</id>
-            <date>2026-01-12T12:00</date>
-            <description>Wysyłka</description>
+            <date>2027-09-12T15:30</date>
+            <description>tenis</description>
         </event>
         <event>
             <id>4</id>
@@ -110,11 +110,6 @@
         </event>
         <event>
             <id>11</id>
-            <date>2027-02-13T17:21</date>
-            <description>Zakupy</description>
-        </event>
-        <event>
-            <id>12</id>
             <date>2027-02-13T17:21</date>
             <description>Zakupy</description>
         </event>
