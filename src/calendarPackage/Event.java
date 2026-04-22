@@ -85,7 +85,7 @@ public class Event implements Comparable<Event> {
 		System.out.println("Brak zdarzenia o id: " + id);
 	}
 	
-	public static void editEvent(ArrayList<Event> events, int id, LocalDateTime newDate, String newDescription, URI newURI) {
+	public static void editEvent(ArrayList<Event> events, int id, LocalDateTime newDate, String newDescription, URI newMapUri) {
 		for (Event event : events) {
 			if (event.getId() == id) {
 
@@ -98,6 +98,7 @@ public class Event implements Comparable<Event> {
 
 				event.setDate(newDate);
 				event.setDescription(newDescription);
+				event.setMapUri(newMapUri);
 
 				System.out.println("Event after edit:");
 				System.out.println(event);
