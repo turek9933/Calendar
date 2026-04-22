@@ -2,64 +2,74 @@
 <calendar>
     <contacts>
         <contact>
-            <id>10</id>
-            <name>Ewa</name>
-            <surname>Woźniak</surname>
-            <phoneNumber>500123456</phoneNumber>
-        </contact>
-        <contact>
             <id>2</id>
             <name>Jan</name>
             <surname>Kowalski</surname>
-            <phoneNumber>501234567</phoneNumber>
-        </contact>
-        <contact>
-            <id>1</id>
-            <name>Anna</name>
-            <surname>Nowak</surname>
-            <phoneNumber>502345678</phoneNumber>
+            <phoneNumber>+48501234567</phoneNumber>
+            <mail>jana@onet.pl</mail>
         </contact>
         <contact>
             <id>3</id>
             <name>Piotr</name>
             <surname>Wiśniewski</surname>
-            <phoneNumber>503456789</phoneNumber>
+            <phoneNumber>+48503456789</phoneNumber>
+            <mail>piotr@onet.pl</mail>
         </contact>
         <contact>
             <id>4</id>
-            <name>Maria</name>
-            <surname>Wójcik</surname>
-            <phoneNumber>504567890</phoneNumber>
+            <name>Katarzyna</name>
+            <surname>Kowalczyk</surname>
+            <phoneNumber>+48512345678</phoneNumber>
+            <mail>katarzyna@onet.pl</mail>
         </contact>
         <contact>
             <id>5</id>
-            <name>Tomasz</name>
-            <surname>Kowalczyk</surname>
-            <phoneNumber>505678901</phoneNumber>
+            <name>Michał</name>
+            <surname>Kamiński</surname>
+            <phoneNumber>+48523456789</phoneNumber>
+            <mail>michal@onet.pl</mail>
         </contact>
         <contact>
             <id>6</id>
-            <name>Magdalena</name>
-            <surname>Kamińska</surname>
-            <phoneNumber>506789012</phoneNumber>
+            <name>Agnieszka</name>
+            <surname>Lewandowska</surname>
+            <phoneNumber>+48534567890</phoneNumber>
+            <mail>agnieszka@onet.pl</mail>
         </contact>
         <contact>
             <id>7</id>
-            <name>Paweł</name>
-            <surname>Lewandowski</surname>
-            <phoneNumber>507890123</phoneNumber>
+            <name>Tomasz</name>
+            <surname>Zieliński</surname>
+            <phoneNumber>+48545678901</phoneNumber>
+            <mail>tomasz@onet.pl</mail>
         </contact>
         <contact>
             <id>8</id>
-            <name>Agnieszka</name>
-            <surname>Zielińska</surname>
-            <phoneNumber>508901234</phoneNumber>
+            <name>Paweł</name>
+            <surname>Szymański</surname>
+            <phoneNumber>+48556789012</phoneNumber>
+            <mail>pawel@onet.pl</mail>
         </contact>
         <contact>
             <id>9</id>
-            <name>Michał</name>
-            <surname>Szymański</surname>
-            <phoneNumber>509012345</phoneNumber>
+            <name>Magdalena</name>
+            <surname>Woźniak</surname>
+            <phoneNumber>+48567890123</phoneNumber>
+            <mail>magdalena@onet.pl</mail>
+        </contact>
+        <contact>
+            <id>10</id>
+            <name>Krzysztof</name>
+            <surname>Dąbrowski</surname>
+            <phoneNumber>+48578901234</phoneNumber>
+            <mail>krzysztof@onet.pl</mail>
+        </contact>
+        <contact>
+            <id>1</id>
+            <name>Anna</name>
+            <surname>Nowak</surname>
+            <phoneNumber>+48654564567</phoneNumber>
+            <mail>anna@onet.pl</mail>
         </contact>
     </contacts>
     <events>
@@ -67,51 +77,61 @@
             <id>1</id>
             <date>2026-01-10T09:00</date>
             <description>Spotkanie</description>
+            <mapUri>https://maps.app.goo.gl/a9xJUn3aTCgQWSyFA</mapUri>
         </event>
         <event>
             <id>3</id>
             <date>2027-09-12T15:30</date>
             <description>tenis</description>
+            <mapUri>https://maps.app.goo.gl/a9xJUn3aTCgQWSyFA</mapUri>
         </event>
         <event>
             <id>4</id>
             <date>2026-01-13T14:15</date>
             <description>Kino</description>
+            <mapUri>https://maps.app.goo.gl/a9xJUn3aTCgQWSyFA</mapUri>
         </event>
         <event>
             <id>5</id>
             <date>2026-01-14T16:00</date>
             <description>Omówienie projektu</description>
+            <mapUri>https://maps.app.goo.gl/a9xJUn3aTCgQWSyFA</mapUri>
         </event>
         <event>
             <id>6</id>
             <date>2026-01-15T08:45</date>
             <description>Zapłacić</description>
+            <mapUri>https://maps.app.goo.gl/a9xJUn3aTCgQWSyFA</mapUri>
         </event>
         <event>
             <id>7</id>
             <date>2026-01-16T11:20</date>
             <description>Rozmowa o prace</description>
+            <mapUri>https://maps.app.goo.gl/a9xJUn3aTCgQWSyFA</mapUri>
         </event>
         <event>
             <id>8</id>
             <date>2026-01-17T13:10</date>
             <description>Wizyta u lekarza</description>
+            <mapUri>https://maps.app.goo.gl/a9xJUn3aTCgQWSyFA</mapUri>
         </event>
         <event>
             <id>9</id>
             <date>2026-01-18T15:40</date>
             <description>Terminu projektu</description>
+            <mapUri>https://maps.app.goo.gl/a9xJUn3aTCgQWSyFA</mapUri>
         </event>
         <event>
             <id>10</id>
             <date>2026-01-19T17:30</date>
             <description>Odbiór samochodu</description>
+            <mapUri>https://maps.app.goo.gl/a9xJUn3aTCgQWSyFA</mapUri>
         </event>
         <event>
             <id>11</id>
             <date>2027-02-13T17:21</date>
             <description>Zakupy</description>
+            <mapUri>https://maps.app.goo.gl/2Qy5tNCCtX26HgAt9</mapUri>
         </event>
     </events>
 </calendar>

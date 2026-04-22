@@ -16,6 +16,11 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.net.URI;
+
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
+import jakarta.mail.internet.InternetAddress;
 
 public class XmlManager {
 	public static void load(ArrayList<Contact> contacts, ArrayList<Event> events, String fileName) throws Exception {
@@ -67,15 +72,23 @@ public class XmlManager {
 		Element contactsElement = (Element) doc.getElementsByTagName("contacts").item(0);
 	    NodeList contactNodes = contactsElement.getElementsByTagName("contact");
 	    
+		// Konwersja numeru telefonu ze Sting
+		PhoneNumberUtil util = PhoneNumberUtil.getInstance();
+
 	    for (int i = 0; i < contactNodes.getLength(); i++) {
 	    	Element contactElement = (Element) contactNodes.item(i);
 	    	
 	    	int id = Integer.parseInt(contactElement.getElementsByTagName("id").item(0).getTextContent());
 	    	String name = contactElement.getElementsByTagName("name").item(0).getTextContent();
 	    	String surname = contactElement.getElementsByTagName("surname").item(0).getTextContent();
-	    	String phoneNumber = contactElement.getElementsByTagName("phoneNumber").item(0).getTextContent();
+	    	
+	    	String phoneNumberString = contactElement.getElementsByTagName("phoneNumber").item(0).getTextContent();
+	    	Phonenumber.PhoneNumber phoneNumber = util.parse(phoneNumberString, null);
 
-	    	contacts.add(new Contact(id, name, surname, phoneNumber));
+			String mailString = contactElement.getElementsByTagName("mail").item(0).getTextContent();
+	    	InternetAddress mail = new InternetAddress(mailString);
+
+	    	contacts.add(new Contact(id, name, surname, phoneNumber, mail));
 	    }
 	}
 
@@ -89,15 +102,19 @@ public class XmlManager {
 	    	int id = Integer.parseInt(eventElement.getElementsByTagName("id").item(0).getTextContent());
 	    	LocalDateTime date = LocalDateTime.parse(eventElement.getElementsByTagName("date").item(0).getTextContent());
 	    	String description = eventElement.getElementsByTagName("description").item(0).getTextContent();
+	    	URI mapUri = new URI(eventElement.getElementsByTagName("mapUri").item(0).getTextContent());
 
-	    	events.add(new Event(id, date, description));
+	    	events.add(new Event(id, date, description, mapUri));
 	    }
 	}
 	
 	private static void saveContacts(ArrayList<Contact> contacts, Element root, Document doc) throws Exception {
 		Element contactRoot = doc.createElement("contacts");
 		root.appendChild(contactRoot);
-		
+
+		// Konwersja numeru telefonu na Sting
+		PhoneNumberUtil util = PhoneNumberUtil.getInstance();
+
 		for (Contact c : contacts) {
 	    	Element contactElement = doc.createElement("contact");
 
@@ -113,9 +130,14 @@ public class XmlManager {
 	    	surname.setTextContent(c.getSurname());
 	    	contactElement.appendChild(surname);
 	    	
-	    	Element phoneNumber = doc.createElement("phoneNumber");
-	    	phoneNumber.setTextContent(c.getPhoneNumber());
-	    	contactElement.appendChild(phoneNumber);
+	    	Element phoneNumberElement = doc.createElement("phoneNumber");
+	    	// Konwersja numeru telefonu na Sting
+	    	String phoneNumberString = util.format(c.getPhoneNumber(), PhoneNumberUtil.PhoneNumberFormat.E164);	    	
+	    	phoneNumberElement.setTextContent(phoneNumberString);
+	    	contactElement.appendChild(phoneNumberElement);
+			Element mailElement = doc.createElement("mail");
+	    	mailElement.setTextContent(c.getMail().toString());
+	    	contactElement.appendChild(mailElement);
 
 	    	contactRoot.appendChild(contactElement);
 	    }
@@ -133,13 +155,16 @@ public class XmlManager {
 	    	eventElement.appendChild(id);
 
 	    	Element date = doc.createElement("date");
-//	    	TODO pilnować w przypadku zmiany klasy Event
 	    	date.setTextContent(e.getDateString());
 	    	eventElement.appendChild(date);
-	    	
+
 	    	Element description = doc.createElement("description");
 	    	description.setTextContent(e.getDescription());
 	    	eventElement.appendChild(description);
+
+	    	Element mapUri = doc.createElement("mapUri");
+	    	mapUri.setTextContent(e.getMapUri().toString());
+	    	eventElement.appendChild(mapUri);
 
 	    	eventRoot.appendChild(eventElement);
 	    }

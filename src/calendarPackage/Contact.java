@@ -1,18 +1,22 @@
 package calendarPackage;
 
 import java.util.ArrayList;
+import com.google.i18n.phonenumbers.Phonenumber;
+import jakarta.mail.internet.InternetAddress;
 
 public class Contact implements Comparable<Contact> {
 	private int id;
 	private String name;
 	private String surname;
-	private String phoneNumber;
+	private Phonenumber.PhoneNumber phoneNumber;
+	private InternetAddress mail;
 
-	public Contact(int id, String name, String surname, String phoneNumber) {
+	public Contact(int id, String name, String surname, Phonenumber.PhoneNumber phoneNumber, InternetAddress mail) {
 		this.id = id;
 		this.name = name;
 		this.surname = surname;
 		this.phoneNumber = phoneNumber;
+		this.mail = mail;
 	}
 
 	public int getId() {
@@ -39,12 +43,20 @@ public class Contact implements Comparable<Contact> {
 		this.surname = surname;
 	}
 
-	public String getPhoneNumber() {
+	public Phonenumber.PhoneNumber getPhoneNumber() {
 		return phoneNumber;
 	}
 
-	public void setPhoneNumber(String phoneNumber) {
+	public void setPhoneNumber(Phonenumber.PhoneNumber phoneNumber) {
 		this.phoneNumber = phoneNumber;
+	}
+
+	public InternetAddress getMail() {
+	    return mail;
+	}
+
+	public void setMail(InternetAddress mail) {
+	    this.mail = mail;
 	}
 	
 	public static void printContacts(ArrayList<Contact> contacts) {
@@ -53,7 +65,7 @@ public class Contact implements Comparable<Contact> {
 		}
 	}
 	
-	public static void addContact(ArrayList<Contact> contacts, String name, String surname, String phoneNumber) {
+	public static void addContact(ArrayList<Contact> contacts, String name, String surname, Phonenumber.PhoneNumber phoneNumber, InternetAddress mail) {
 		for (Contact c : contacts) {
 			if (c.getPhoneNumber().equals(phoneNumber)) {
 				System.out.println("Kontakt o takim nr tel istnieje.");
@@ -69,7 +81,7 @@ public class Contact implements Comparable<Contact> {
 			}
 		}
 		
-		contacts.add(new Contact(newId, name, surname, phoneNumber));
+		contacts.add(new Contact(newId, name, surname, phoneNumber, mail));
 	}
 
 	public static void deleteContactById(ArrayList<Contact> contacts, int id) {
@@ -83,13 +95,14 @@ public class Contact implements Comparable<Contact> {
 		System.out.println("Brak kontaktu o id: " + id);
 	}
 	
-	public static void editContact(ArrayList<Contact> contacts, int id, String newName, String newSurname, String newPhoneNumber) {
+	public static void editContact(ArrayList<Contact> contacts, int id, String newName, String newSurname, Phonenumber.PhoneNumber newPhoneNumber, InternetAddress newMail) {
 		for (Contact contact : contacts) {
 			if (contact.getId() == id) {
 				
 				String oldName = contact.getName();
 				String oldSurname = contact.getSurname();
-				String oldPhoneNumber = contact.getPhoneNumber();
+				Phonenumber.PhoneNumber oldPhoneNumber = contact.getPhoneNumber();
+	            InternetAddress oldMail = contact.getMail();
 
 				for (Contact other : contacts) {
 					if (other.getPhoneNumber().equals(newPhoneNumber) && other.getId() != id) {
@@ -101,11 +114,12 @@ public class Contact implements Comparable<Contact> {
 				}
 				
 				System.out.println("Contact before edit:");
-				System.out.println("[Contact] Id: " + contact.getId() + " Name: " + oldName + " Surname: " + oldSurname + " Phone number: " + oldPhoneNumber);
+				System.out.println("[Contact] Id: " + contact.getId() + " Name: " + oldName + " Surname: " + oldSurname + " Phone number: " + oldPhoneNumber + " Mail: " + oldMail);
 				
 				contact.setName(newName);
 				contact.setSurname(newSurname);
 				contact.setPhoneNumber(newPhoneNumber);
+			    contact.setMail(newMail);
 
 				System.out.println("Contact after edit:");
 				System.out.println(contact);
@@ -118,7 +132,7 @@ public class Contact implements Comparable<Contact> {
 	
 	@Override
 	public String toString() {
-		return "[Contact] Id: " + this.id + " Name: " + this.name + " Surname: " + this.surname + " Phone number: " + this.phoneNumber;
+		return "[Contact] Id: " + this.id + " Name: " + this.name + " Surname: " + this.surname + " Phone number: " + this.phoneNumber + " Mail: " + this.mail;
 	}
 
 	@Override

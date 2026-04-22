@@ -2,16 +2,19 @@ package calendarPackage;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.net.URI;
 
 public class Event implements Comparable<Event> {
 	private int id;
 	private LocalDateTime date;
 	private String description;
+	private URI mapUri;
 
-	public Event(int id, LocalDateTime date, String description) {
+	public Event(int id, LocalDateTime date, String description, URI mapUri) {
 		this.id = id;
 		this.date = date;
 		this.description = description;
+		this.mapUri = mapUri;
 	}
 
 	public int getId() {
@@ -47,20 +50,28 @@ public class Event implements Comparable<Event> {
 		this.description = description;
 	}
 
+	public URI getMapUri() {
+		return mapUri;
+	}
+
+	public void setMapUri(URI mapUri) {
+		this.mapUri = mapUri;
+	}
+
 	public static void printEvents(ArrayList<Event> events) {
 		for (Event e : events) {
 			System.out.println(e);
 		}
 	}
 
-	public static void addEvent(ArrayList<Event> events, LocalDateTime date, String description) {
+	public static void addEvent(ArrayList<Event> events, LocalDateTime date, String description, URI mapUri) {
 		int newId = 1;
 		for (Event e : events) {
 			if (e.getId() >= newId) {
 				newId = e.getId() + 1;
 			}
 		}
-		events.add(new Event(newId, date, description));
+		events.add(new Event(newId, date, description, mapUri));
 	}
 
 	public static void deleteEventById(ArrayList<Event> events, int id) {
@@ -74,15 +85,16 @@ public class Event implements Comparable<Event> {
 		System.out.println("Brak zdarzenia o id: " + id);
 	}
 	
-	public static void editEvent(ArrayList<Event> events, int id, LocalDateTime newDate, String newDescription) {
+	public static void editEvent(ArrayList<Event> events, int id, LocalDateTime newDate, String newDescription, URI newURI) {
 		for (Event event : events) {
 			if (event.getId() == id) {
 
 				LocalDateTime oldDate = event.getDate();
 				String oldDescription = event.getDescription();
+				URI oldMapUri = event.getMapUri();
 
 				System.out.println("Event before edit:");
-				System.out.println("[Event] Id: " + event.getId() + " Date: " + oldDate + " Description: " + oldDescription);
+				System.out.println("[Event] Id: " + event.getId() + " Date: " + oldDate + " Description: " + oldDescription  + " Adres: " + oldMapUri);
 
 				event.setDate(newDate);
 				event.setDescription(newDescription);
@@ -98,7 +110,7 @@ public class Event implements Comparable<Event> {
 	
 	@Override
 	public String toString() {
-		return "[Event] Id: " + this.id + " Date: " + this.date + " Description: " + this.description;
+		return "[Event] Id: " + this.id + " Date: " + this.date + " Description: " + this.description + " Adres: " + this.mapUri;
 	}
 
 	@Override
