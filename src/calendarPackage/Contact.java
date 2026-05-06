@@ -10,7 +10,8 @@ public class Contact implements Comparable<Contact> {
 	private String surname;
 	private Phonenumber.PhoneNumber phoneNumber;
 	private InternetAddress mail;
-
+	private ArrayList<Event> ContactEvents = new ArrayList<>();
+	
 	public Contact(int id, String name, String surname, Phonenumber.PhoneNumber phoneNumber, InternetAddress mail) {
 		this.id = id;
 		this.name = name;
@@ -19,6 +20,15 @@ public class Contact implements Comparable<Contact> {
 		this.mail = mail;
 	}
 
+	
+	public ArrayList<Event> getContactEvents() {
+	    return ContactEvents;
+	}
+
+	public void setContactEvents(ArrayList<Event> contactEvents) {
+	    ContactEvents = contactEvents;
+	}
+	
 	public int getId() {
 		return id;
 	}
@@ -57,6 +67,29 @@ public class Contact implements Comparable<Contact> {
 
 	public void setMail(InternetAddress mail) {
 	    this.mail = mail;
+	}
+	
+	public static void addContactEvent(ArrayList<Contact> contacts, int contactId, ArrayList<Event> events,
+			int eventId) {
+
+		Contact contact = Contact.getContact(contacts, contactId);
+		Event event = Event.getEvent(events, eventId);
+
+		if (contact == null || event == null) {
+			return;
+		}
+
+		contact.getContactEvents().add(event);
+		event.getEventContacts().add(contact);
+	}
+	
+	public static Contact getContact(ArrayList<Contact> contacts, int id) {
+	    for (Contact c : contacts) {
+	        if (c.getId() == id) {
+	            return c;
+	        }
+	    }
+	    return null;
 	}
 	
 	public static void printContacts(ArrayList<Contact> contacts) {

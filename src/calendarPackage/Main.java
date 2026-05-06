@@ -55,6 +55,19 @@ public class Main {
 		
 		System.out.println();
 		System.out.println("Zapis do pliku zmodyfikowanych danych");
+		System.out.println("AAAAAAA");
+
+		ArrayList<Contact> loadedContacts = new ArrayList<>();
+		ArrayList<Event> loadedEvents = new ArrayList<>();
+
+		DbManager.loadAll(loadedContacts, loadedEvents);
+
+		Contact.printContacts(loadedContacts);
+		Event.printEvents(loadedEvents);
+
+		System.out.println("AAAAAAA");
+		DbManager.saveAll(contacts, events);
+		
 		XmlManager.save(contacts, events);
 	}
 

@@ -9,14 +9,23 @@ public class Event implements Comparable<Event> {
 	private LocalDateTime date;
 	private String description;
 	private URI mapUri;
-
+	private ArrayList<Contact> eventContacts = new ArrayList<>();
+	
 	public Event(int id, LocalDateTime date, String description, URI mapUri) {
 		this.id = id;
 		this.date = date;
 		this.description = description;
 		this.mapUri = mapUri;
 	}
+	
+	public ArrayList<Contact> getEventContacts() {
+	    return eventContacts;
+	}
 
+	public void setEventContacts(ArrayList<Contact> eventContacts) {
+	    this.eventContacts = eventContacts;
+	}
+	
 	public int getId() {
 		return id;
 	}
@@ -58,6 +67,30 @@ public class Event implements Comparable<Event> {
 		this.mapUri = mapUri;
 	}
 
+	public static Event getEvent(ArrayList<Event> events, int id) {
+        for (Event e : events) {
+			if (e.getId() == id) {
+				return e;
+			}
+		}
+		return null;
+
+	}
+
+	public static void addContactEvent(ArrayList<Contact> contacts, int contactId, ArrayList<Event> events,
+			int eventId) {
+
+		Contact contact = Contact.getContact(contacts, contactId);
+		Event event = Event.getEvent(events, eventId);
+
+		if (contact == null || event == null) {
+			return;
+		}
+
+		contact.getContactEvents().add(event);
+		event.getEventContacts().add(contact);
+	}
+
 	public static void printEvents(ArrayList<Event> events) {
 		for (Event e : events) {
 			System.out.println(e);
@@ -97,8 +130,9 @@ public class Event implements Comparable<Event> {
 				System.out.println("[Event] Id: " + event.getId() + " Date: " + oldDate + " Description: " + oldDescription  + " Adres: " + oldMapUri);
 
 				event.setDate(newDate);
-				event.setDescription(newDescription);
-
+				event.setDescription(newDescription);	
+				event.setMapUri(newURI);
+				
 				System.out.println("Event after edit:");
 				System.out.println(event);
 				return;

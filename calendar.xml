@@ -83,7 +83,7 @@
             <id>3</id>
             <date>2027-09-12T15:30</date>
             <description>tenis</description>
-            <mapUri>https://maps.app.goo.gl/a9xJUn3aTCgQWSyFA</mapUri>
+            <mapUri>https://maps.app.goo.gl/2Qy5tNCCtX26HgAt9</mapUri>
         </event>
         <event>
             <id>4</id>
@@ -129,6 +129,30 @@
         </event>
         <event>
             <id>11</id>
+            <date>2027-02-13T17:21</date>
+            <description>Zakupy</description>
+            <mapUri>https://maps.app.goo.gl/2Qy5tNCCtX26HgAt9</mapUri>
+        </event>
+        <event>
+            <id>12</id>
+            <date>2027-02-13T17:21</date>
+            <description>Zakupy</description>
+            <mapUri>https://maps.app.goo.gl/2Qy5tNCCtX26HgAt9</mapUri>
+        </event>
+        <event>
+            <id>13</id>
+            <date>2027-02-13T17:21</date>
+            <description>Zakupy</description>
+            <mapUri>https://maps.app.goo.gl/2Qy5tNCCtX26HgAt9</mapUri>
+        </event>
+        <event>
+            <id>14</id>
+            <date>2027-02-13T17:21</date>
+            <description>Zakupy</description>
+            <mapUri>https://maps.app.goo.gl/2Qy5tNCCtX26HgAt9</mapUri>
+        </event>
+        <event>
+            <id>15</id>
             <date>2027-02-13T17:21</date>
             <description>Zakupy</description>
             <mapUri>https://maps.app.goo.gl/2Qy5tNCCtX26HgAt9</mapUri>
