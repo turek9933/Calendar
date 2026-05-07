@@ -1,20 +1,30 @@
 package calendarPackage;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.net.URI;
 
 public class Event implements Comparable<Event> {
 	private int id;
 	private LocalDateTime date;
 	private String description;
 	private URI mapUri;
+	private ArrayList<Contact> eventContacts = new ArrayList<>();
 
 	public Event(int id, LocalDateTime date, String description, URI mapUri) {
 		this.id = id;
 		this.date = date;
 		this.description = description;
 		this.mapUri = mapUri;
+	}
+
+	public Event(int id, LocalDateTime date, String description, URI mapUri, ArrayList<Contact> eventContacts) {
+		this.id = id;
+		this.date = date;
+		this.description = description;
+		this.mapUri = mapUri;
+		this.eventContacts = eventContacts;
 	}
 
 	public int getId() {
@@ -56,6 +66,49 @@ public class Event implements Comparable<Event> {
 
 	public void setMapUri(URI mapUri) {
 		this.mapUri = mapUri;
+	}
+
+	public void setMapUri(String mapUriString) {
+		try {
+			this.mapUri = new URI(mapUriString);
+		} catch (URISyntaxException e) {
+			throw new IllegalArgumentException("Invalid URI string: " + mapUriString);
+		}
+	}
+
+	public ArrayList<Contact> getEventContacts() {
+		return eventContacts;
+	}
+
+	public void setEventContacts(ArrayList<Contact> eventContacts) {
+		this.eventContacts = eventContacts;
+	}
+
+	public void addEventContact(Contact contact) {
+		this.eventContacts.add(contact);
+	}
+
+	public static Event getEvent(ArrayList<Event> events, int id) {
+		for (Event e : events) {
+			if (e.getId() == id) {
+				return e;
+			}
+		}
+		return null;
+	}
+
+	public static void addEventContact(ArrayList<Event> events, int eventId, Contact contact) {
+		Event.getEvent(events, eventId).addEventContact(contact);
+	}
+	public static void addEventContact(ArrayList<Event> events, int eventId, ArrayList<Contact> contacts, int contactId) {
+		Event event = Event.getEvent(events, eventId);
+		Contact contact = Contact.getContact(contacts, contactId);
+
+		if (contact == null || event == null) {
+			return;
+		}
+		event.addEventContact(contact);
+		contact.addContactEvent(event);
 	}
 
 	public static void printEvents(ArrayList<Event> events) {

@@ -1,8 +1,11 @@
 package calendarPackage;
 
-import java.util.ArrayList;
+import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.Phonenumber;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import jakarta.mail.internet.AddressException;
 import jakarta.mail.internet.InternetAddress;
+import java.util.ArrayList;
 
 public class Contact implements Comparable<Contact> {
 	private int id;
@@ -10,13 +13,23 @@ public class Contact implements Comparable<Contact> {
 	private String surname;
 	private Phonenumber.PhoneNumber phoneNumber;
 	private InternetAddress mail;
-
+	private ArrayList<Event> contactEvents = new ArrayList<>();
+	
 	public Contact(int id, String name, String surname, Phonenumber.PhoneNumber phoneNumber, InternetAddress mail) {
 		this.id = id;
 		this.name = name;
 		this.surname = surname;
 		this.phoneNumber = phoneNumber;
 		this.mail = mail;
+	}
+
+	public Contact(int id, String name, String surname, Phonenumber.PhoneNumber phoneNumber, InternetAddress mail, ArrayList<Event> contactEvents) {
+		this.id = id;
+		this.name = name;
+		this.surname = surname;
+		this.phoneNumber = phoneNumber;
+		this.mail = mail;
+		this.contactEvents = contactEvents;
 	}
 
 	public int getId() {
@@ -50,6 +63,15 @@ public class Contact implements Comparable<Contact> {
 	public void setPhoneNumber(Phonenumber.PhoneNumber phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
+	
+	public void setPhoneNumber(String phoneNumberString) {
+		PhoneNumberUtil util = PhoneNumberUtil.getInstance();
+		try {
+			this.phoneNumber = util.parse(phoneNumberString, null);
+		} catch (NumberParseException e) {
+	    	throw new IllegalArgumentException("Invalid phone number: " + phoneNumberString);
+		}
+	}
 
 	public InternetAddress getMail() {
 	    return mail;
@@ -58,13 +80,55 @@ public class Contact implements Comparable<Contact> {
 	public void setMail(InternetAddress mail) {
 	    this.mail = mail;
 	}
+
+	public void setMail(String mailString) {
+	    try {
+	    	this.mail = new InternetAddress(mailString);
+	    } catch (AddressException e) {
+	    	throw new IllegalArgumentException("Invalid mail: " + mailString);
+	    }
+	}
+
+	public ArrayList<Event> getContactEvents() {
+		return contactEvents;
+	}
+
+	public void setContactEvents(ArrayList<Event> contactEvents) {
+		this.contactEvents = contactEvents;
+	}
+
+	public void addContactEvent(Event event) {
+		this.contactEvents.add(event);
+	}
+	public static void addContactEvent(ArrayList<Contact> contacts, int contactId, Event event) {
+		Contact.getContact(contacts, contactId).addContactEvent(event);
+	}
+
+	public static void addContactEvent(ArrayList<Contact> contacts, int contactId, ArrayList<Event> events, int eventId) {
+		Contact contact = Contact.getContact(contacts, contactId);
+		Event event = Event.getEvent(events, eventId);
+
+		if (contact == null || event == null) {
+			return;
+		}
+		contact.addContactEvent(event);
+		event.addEventContact(contact);
+	}
+	
+	public static Contact getContact(ArrayList<Contact> contacts, int id) {
+		for (Contact c : contacts) {
+			if (c.getId() == id) {
+				return c;
+			}
+		}
+		return null;
+	}
 	
 	public static void printContacts(ArrayList<Contact> contacts) {
 		for (Contact c : contacts) {
 			System.out.println(c);
 		}
 	}
-	
 	public static void addContact(ArrayList<Contact> contacts, String name, String surname, Phonenumber.PhoneNumber phoneNumber, InternetAddress mail) {
 		for (Contact c : contacts) {
 			if (c.getPhoneNumber().equals(phoneNumber)) {
