@@ -1,8 +1,9 @@
 package calendarPackage;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.net.URI;
 
 public class Event implements Comparable<Event> {
 	private int id;
@@ -10,22 +11,22 @@ public class Event implements Comparable<Event> {
 	private String description;
 	private URI mapUri;
 	private ArrayList<Contact> eventContacts = new ArrayList<>();
-	
+
 	public Event(int id, LocalDateTime date, String description, URI mapUri) {
 		this.id = id;
 		this.date = date;
 		this.description = description;
 		this.mapUri = mapUri;
 	}
-	
-	public ArrayList<Contact> getEventContacts() {
-	    return eventContacts;
+
+	public Event(int id, LocalDateTime date, String description, URI mapUri, ArrayList<Contact> eventContacts) {
+		this.id = id;
+		this.date = date;
+		this.description = description;
+		this.mapUri = mapUri;
+		this.eventContacts = eventContacts;
 	}
 
-	public void setEventContacts(ArrayList<Contact> eventContacts) {
-	    this.eventContacts = eventContacts;
-	}
-	
 	public int getId() {
 		return id;
 	}
@@ -67,28 +68,47 @@ public class Event implements Comparable<Event> {
 		this.mapUri = mapUri;
 	}
 
+	public void setMapUri(String mapUriString) {
+		try {
+			this.mapUri = new URI(mapUriString);
+		} catch (URISyntaxException e) {
+			throw new IllegalArgumentException("Invalid URI string: " + mapUriString);
+		}
+	}
+
+	public ArrayList<Contact> getEventContacts() {
+		return eventContacts;
+	}
+
+	public void setEventContacts(ArrayList<Contact> eventContacts) {
+		this.eventContacts = eventContacts;
+	}
+
+	public void addEventContact(Contact contact) {
+		this.eventContacts.add(contact);
+	}
+
 	public static Event getEvent(ArrayList<Event> events, int id) {
-        for (Event e : events) {
+		for (Event e : events) {
 			if (e.getId() == id) {
 				return e;
 			}
 		}
 		return null;
-
 	}
 
-	public static void addContactEvent(ArrayList<Contact> contacts, int contactId, ArrayList<Event> events,
-			int eventId) {
-
-		Contact contact = Contact.getContact(contacts, contactId);
+	public static void addEventContact(ArrayList<Event> events, int eventId, Contact contact) {
+		Event.getEvent(events, eventId).addEventContact(contact);
+	}
+	public static void addEventContact(ArrayList<Event> events, int eventId, ArrayList<Contact> contacts, int contactId) {
 		Event event = Event.getEvent(events, eventId);
+		Contact contact = Contact.getContact(contacts, contactId);
 
 		if (contact == null || event == null) {
 			return;
 		}
-
-		contact.getContactEvents().add(event);
-		event.getEventContacts().add(contact);
+		event.addEventContact(contact);
+		contact.addContactEvent(event);
 	}
 
 	public static void printEvents(ArrayList<Event> events) {
@@ -118,7 +138,7 @@ public class Event implements Comparable<Event> {
 		System.out.println("Brak zdarzenia o id: " + id);
 	}
 	
-	public static void editEvent(ArrayList<Event> events, int id, LocalDateTime newDate, String newDescription, URI newURI) {
+	public static void editEvent(ArrayList<Event> events, int id, LocalDateTime newDate, String newDescription, URI newMapUri) {
 		for (Event event : events) {
 			if (event.getId() == id) {
 
@@ -130,9 +150,9 @@ public class Event implements Comparable<Event> {
 				System.out.println("[Event] Id: " + event.getId() + " Date: " + oldDate + " Description: " + oldDescription  + " Adres: " + oldMapUri);
 
 				event.setDate(newDate);
-				event.setDescription(newDescription);	
-				event.setMapUri(newURI);
-				
+				event.setDescription(newDescription);
+				event.setMapUri(newMapUri);
+
 				System.out.println("Event after edit:");
 				System.out.println(event);
 				return;

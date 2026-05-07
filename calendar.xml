@@ -2,6 +2,13 @@
 <calendar>
     <contacts>
         <contact>
+            <id>1</id>
+            <name>Anna</name>
+            <surname>Nowak</surname>
+            <phoneNumber>+48654564567</phoneNumber>
+            <mail>anna@onet.pl</mail>
+        </contact>
+        <contact>
             <id>2</id>
             <name>Jan</name>
             <surname>Kowalski</surname>
@@ -65,11 +72,45 @@
             <mail>krzysztof@onet.pl</mail>
         </contact>
         <contact>
-            <id>1</id>
-            <name>Anna</name>
-            <surname>Nowak</surname>
-            <phoneNumber>+48654564567</phoneNumber>
-            <mail>anna@onet.pl</mail>
+            <id>11</id>
+            <name>Krzysztof Super</name>
+            <surname>Dąbrowski</surname>
+            <phoneNumber>+48578901234</phoneNumber>
+            <mail>krzysztof@onet.pl</mail>
+            <contactEvents>
+                <eventId>1</eventId>
+                <eventId>2</eventId>
+                <eventId>3</eventId>
+                <eventId>4</eventId>
+                <eventId>5</eventId>
+                <eventId>6</eventId>
+                <eventId>7</eventId>
+                <eventId>8</eventId>
+                <eventId>9</eventId>
+                <eventId>10</eventId>
+            </contactEvents>
+        </contact>
+        <contact>
+            <id>12</id>
+            <name>Andrzej</name>
+            <surname>Chrząszcz</surname>
+            <phoneNumber>+48858941234</phoneNumber>
+            <mail>andrzej@onet.pl</mail>
+            <contactEvents>
+                <eventId>5</eventId>
+                <eventId>7</eventId>
+            </contactEvents>
+        </contact>
+        <contact>
+            <id>13</id>
+            <name>Michaś</name>
+            <surname>Lubomir</surname>
+            <phoneNumber>+48946741234</phoneNumber>
+            <mail>lubomir@wp.pl</mail>
+            <contactEvents>
+                <eventId>7</eventId>
+                <eventId>10</eventId>
+            </contactEvents>
         </contact>
     </contacts>
     <events>
@@ -78,84 +119,94 @@
             <date>2026-01-10T09:00</date>
             <description>Spotkanie</description>
             <mapUri>https://maps.app.goo.gl/a9xJUn3aTCgQWSyFA</mapUri>
+            <eventContacts>
+                <contactId>11</contactId>
+            </eventContacts>
+        </event>
+        <event>
+            <id>2</id>
+            <date>2026-01-11T10:30</date>
+            <description>Telefon do Anny</description>
+            <mapUri>https://maps.app.goo.gl/a9xJUn3aTCgQWSyFA</mapUri>
+            <eventContacts>
+                <contactId>11</contactId>
+            </eventContacts>
         </event>
         <event>
             <id>3</id>
-            <date>2027-09-12T15:30</date>
-            <description>tenis</description>
-            <mapUri>https://maps.app.goo.gl/2Qy5tNCCtX26HgAt9</mapUri>
+            <date>2026-01-12T12:00</date>
+            <description>Wysyłka</description>
+            <mapUri>https://maps.app.goo.gl/a9xJUn3aTCgQWSyFA</mapUri>
+            <eventContacts>
+                <contactId>11</contactId>
+            </eventContacts>
         </event>
         <event>
             <id>4</id>
             <date>2026-01-13T14:15</date>
             <description>Kino</description>
             <mapUri>https://maps.app.goo.gl/a9xJUn3aTCgQWSyFA</mapUri>
+            <eventContacts>
+                <contactId>11</contactId>
+            </eventContacts>
         </event>
         <event>
             <id>5</id>
             <date>2026-01-14T16:00</date>
             <description>Omówienie projektu</description>
             <mapUri>https://maps.app.goo.gl/a9xJUn3aTCgQWSyFA</mapUri>
+            <eventContacts>
+                <contactId>11</contactId>
+                <contactId>12</contactId>
+            </eventContacts>
         </event>
         <event>
             <id>6</id>
             <date>2026-01-15T08:45</date>
             <description>Zapłacić</description>
             <mapUri>https://maps.app.goo.gl/a9xJUn3aTCgQWSyFA</mapUri>
+            <eventContacts>
+                <contactId>11</contactId>
+            </eventContacts>
         </event>
         <event>
             <id>7</id>
             <date>2026-01-16T11:20</date>
             <description>Rozmowa o prace</description>
             <mapUri>https://maps.app.goo.gl/a9xJUn3aTCgQWSyFA</mapUri>
+            <eventContacts>
+                <contactId>11</contactId>
+                <contactId>12</contactId>
+                <contactId>13</contactId>
+            </eventContacts>
         </event>
         <event>
             <id>8</id>
             <date>2026-01-17T13:10</date>
             <description>Wizyta u lekarza</description>
             <mapUri>https://maps.app.goo.gl/a9xJUn3aTCgQWSyFA</mapUri>
+            <eventContacts>
+                <contactId>11</contactId>
+            </eventContacts>
         </event>
         <event>
             <id>9</id>
             <date>2026-01-18T15:40</date>
             <description>Terminu projektu</description>
             <mapUri>https://maps.app.goo.gl/a9xJUn3aTCgQWSyFA</mapUri>
+            <eventContacts>
+                <contactId>11</contactId>
+            </eventContacts>
         </event>
         <event>
             <id>10</id>
             <date>2026-01-19T17:30</date>
             <description>Odbiór samochodu</description>
             <mapUri>https://maps.app.goo.gl/a9xJUn3aTCgQWSyFA</mapUri>
-        </event>
-        <event>
-            <id>11</id>
-            <date>2027-02-13T17:21</date>
-            <description>Zakupy</description>
-            <mapUri>https://maps.app.goo.gl/2Qy5tNCCtX26HgAt9</mapUri>
-        </event>
-        <event>
-            <id>12</id>
-            <date>2027-02-13T17:21</date>
-            <description>Zakupy</description>
-            <mapUri>https://maps.app.goo.gl/2Qy5tNCCtX26HgAt9</mapUri>
-        </event>
-        <event>
-            <id>13</id>
-            <date>2027-02-13T17:21</date>
-            <description>Zakupy</description>
-            <mapUri>https://maps.app.goo.gl/2Qy5tNCCtX26HgAt9</mapUri>
-        </event>
-        <event>
-            <id>14</id>
-            <date>2027-02-13T17:21</date>
-            <description>Zakupy</description>
-            <mapUri>https://maps.app.goo.gl/2Qy5tNCCtX26HgAt9</mapUri>
-        </event>
-        <event>
-            <id>15</id>
-            <date>2027-02-13T17:21</date>
-            <description>Zakupy</description>
-            <mapUri>https://maps.app.goo.gl/2Qy5tNCCtX26HgAt9</mapUri>
+            <eventContacts>
+                <contactId>11</contactId>
+                <contactId>13</contactId>
+            </eventContacts>
         </event>
     </events>
 </calendar>

@@ -1,35 +1,36 @@
 package calendarPackage;
 
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
+import jakarta.mail.internet.InternetAddress;
+import java.io.File;
+import java.net.URI;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.stream.StreamResult;
-
-import java.io.File;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.net.URI;
-
-import com.google.i18n.phonenumbers.PhoneNumberUtil;
-import com.google.i18n.phonenumbers.Phonenumber;
-import jakarta.mail.internet.InternetAddress;
-
 public class XmlManager {
+	public static void load(ArrayList<Contact> contacts, ArrayList<Event> events) throws Exception {
+		XmlManager.load(contacts, events, "calendar.xml");
+	}
+
 	public static void load(ArrayList<Contact> contacts, ArrayList<Event> events, String fileName) throws Exception {
 		Document doc = createDocument(fileName);
 		
 		loadContactArray(contacts, doc);
 		loadEventArray(events, doc);
-		loadLinksContactAndEvents(contacts, events, doc);	
-		}
+
+		loadLinksContactAndEvents(contacts, events, doc);
+	}
 	
 	public static void save(ArrayList<Contact> contacts, ArrayList<Event> events) throws Exception {
 	    Document doc = createDocument();
@@ -108,6 +109,29 @@ public class XmlManager {
 	    	events.add(new Event(id, date, description, mapUri));
 	    }
 	}
+	private static void loadLinksContactAndEvents(ArrayList<Contact> contacts, ArrayList<Event> events, Document doc) {
+		Element contactsElement = (Element) doc.getElementsByTagName("contacts").item(0);
+	    NodeList contactNodes = contactsElement.getElementsByTagName("contact");
+
+	    for (int i = 0; i < contactNodes.getLength(); i++) {
+	    	Element contactElement = (Element) contactNodes.item(i);
+
+	    	int contactId = Integer.parseInt(contactElement.getElementsByTagName("id").item(0).getTextContent());
+	    	NodeList contactEventsNodes = contactElement.getElementsByTagName("contactEvents");
+
+	    	if (contactEventsNodes.getLength() == 0) {
+	    		continue;
+	    	}
+
+	    	Element contactEventElement = (Element) contactEventsNodes.item(0);
+	    	NodeList eventIdNodes = contactEventElement.getElementsByTagName("eventId");
+	    	
+	    	for (int j = 0; j < eventIdNodes.getLength(); j++) {
+    			int eventId = Integer.parseInt(eventIdNodes.item(j).getTextContent());
+	    		Contact.addContactEvent(contacts, contactId, events, eventId);
+	    	}
+	    }
+	}
 	
 	private static void saveContacts(ArrayList<Contact> contacts, Element root, Document doc) throws Exception {
 		Element contactRoot = doc.createElement("contacts");
@@ -117,101 +141,79 @@ public class XmlManager {
 		PhoneNumberUtil util = PhoneNumberUtil.getInstance();
 
 		for (Contact c : contacts) {
-			Element contactElement = doc.createElement("contact");
+	    	Element contactElement = doc.createElement("contact");
 
-			Element id = doc.createElement("id");
-			id.setTextContent(Integer.toString(c.getId()));
-			contactElement.appendChild(id);
+	    	Element id = doc.createElement("id");
+	    	id.setTextContent(Integer.toString(c.getId()));
+	    	contactElement.appendChild(id);
 
-			Element name = doc.createElement("name");
-			name.setTextContent(c.getName());
-			contactElement.appendChild(name);
+	    	Element name = doc.createElement("name");
+	    	name.setTextContent(c.getName());
+	    	contactElement.appendChild(name);
 
-			Element surname = doc.createElement("surname");
-			surname.setTextContent(c.getSurname());
-			contactElement.appendChild(surname);
-
-			Element phoneNumberElement = doc.createElement("phoneNumber");
-			// Konwersja numeru telefonu na Sting
-			String phoneNumberString = util.format(c.getPhoneNumber(), PhoneNumberUtil.PhoneNumberFormat.E164);
-			phoneNumberElement.setTextContent(phoneNumberString);
-			contactElement.appendChild(phoneNumberElement);
+	    	Element surname = doc.createElement("surname");
+	    	surname.setTextContent(c.getSurname());
+	    	contactElement.appendChild(surname);
+	    	
+	    	Element phoneNumberElement = doc.createElement("phoneNumber");
+	    	// Konwersja numeru telefonu na Sting
+	    	String phoneNumberString = util.format(c.getPhoneNumber(), PhoneNumberUtil.PhoneNumberFormat.E164);
+	    	phoneNumberElement.setTextContent(phoneNumberString);
+	    	contactElement.appendChild(phoneNumberElement);
 			Element mailElement = doc.createElement("mail");
-			mailElement.setTextContent(c.getMail().toString());
-			contactElement.appendChild(mailElement);
+	    	mailElement.setTextContent(c.getMail().toString());
+	    	contactElement.appendChild(mailElement);
+	    	
+			ArrayList<Event> contactEventsArray = c.getContactEvents();
+	    	if (contactEventsArray.size() > 0) {
+				Element contactEvents = doc.createElement("contactEvents");
+		    	for (Event e : contactEventsArray) {
+		    		Element eventId = doc.createElement("eventId");
+		    		eventId.setTextContent(Integer.toString(e.getId()));
+		    		contactEvents.appendChild(eventId);
+		    	}
+		    	contactElement.appendChild(contactEvents);
+	    	}
 
-			Element contactEvents = doc.createElement("contactEvents");
-			for (Event e : c.getContactEvents()) {
-				Element eventId = doc.createElement("eventId");
-				eventId.setTextContent(Integer.toString(e.getId()));
-				contactEvents.appendChild(eventId);
-			}
-			contactElement.appendChild(contactEvents);
-
-			contactRoot.appendChild(contactElement);
-		}
+	    	contactRoot.appendChild(contactElement);
+	    }
 	}
 
 	private static void saveEvents(ArrayList<Event> events, Element root, Document doc) throws Exception {
-        Element eventRoot = doc.createElement("events");
-        root.appendChild(eventRoot);
+		Element eventRoot = doc.createElement("events");
+		root.appendChild(eventRoot);
+		
+		for (Event e : events) {
+	    	Element eventElement = doc.createElement("event");
 
-        for (Event e : events) {
-            Element eventElement = doc.createElement("event");
+	    	Element id = doc.createElement("id");
+	    	id.setTextContent(Integer.toString(e.getId()));
+	    	eventElement.appendChild(id);
 
-            Element id = doc.createElement("id");
-            id.setTextContent(Integer.toString(e.getId()));
-            eventElement.appendChild(id);
+	    	Element date = doc.createElement("date");
+	    	date.setTextContent(e.getDateString());
+	    	eventElement.appendChild(date);
 
-            Element date = doc.createElement("date");
-            date.setTextContent(e.getDateString());
-            eventElement.appendChild(date);
+	    	Element description = doc.createElement("description");
+	    	description.setTextContent(e.getDescription());
+	    	eventElement.appendChild(description);
 
-            Element description = doc.createElement("description");
-            description.setTextContent(e.getDescription());
-            eventElement.appendChild(description);
+	    	Element mapUri = doc.createElement("mapUri");
+	    	mapUri.setTextContent(e.getMapUri().toString());
+	    	eventElement.appendChild(mapUri);
+	    	
+	    	ArrayList<Contact> eventContactsArray = e.getEventContacts();
+	    	if (eventContactsArray.size() > 0) {
+		    	Element eventContacts = doc.createElement("eventContacts");
+		    	for (Contact c : e.getEventContacts()) {
+		    		Element contactId = doc.createElement("contactId");
+		    		contactId.setTextContent(Integer.toString(c.getId()));
+		    		eventContacts.appendChild(contactId);
+		    	}
+		    	eventElement.appendChild(eventContacts);
+	    	}
 
-            Element mapUri = doc.createElement("mapUri");
-            mapUri.setTextContent(e.getMapUri().toString());
-            eventElement.appendChild(mapUri);
-
-            Element eventContacts = doc.createElement("eventContacts");
-            for (Contact c : e.getEventContacts()) {
-                Element contactId = doc.createElement("contactId");
-                contactId.setTextContent(Integer.toString(c.getId()));
-                eventContacts.appendChild(contactId);
-            }
-            eventElement.appendChild(eventContacts);
-
-            eventRoot.appendChild(eventElement);
-        }
-	
-	}
-
-	private static void loadLinksContactAndEvents(ArrayList<Contact> contacts, ArrayList<Event> events, Document doc) {
-
-		Element contactsElement = (Element) doc.getElementsByTagName("contacts").item(0);
-		NodeList contactNodes = contactsElement.getElementsByTagName("contact");
-
-		for (int i = 0; i < contactNodes.getLength(); i++) {
-			Element contactElement = (Element) contactNodes.item(i);
-
-			int contactId = Integer.parseInt(contactElement.getElementsByTagName("id").item(0).getTextContent());
-
-			NodeList contactEventsNodes = contactElement.getElementsByTagName("contactEvents");
-
-			if (contactEventsNodes.getLength() == 0) {
-				continue;
-			}
-
-			Element contactEventsElement = (Element) contactEventsNodes.item(0);
-			NodeList eventIdNodes = contactEventsElement.getElementsByTagName("eventId");
-
-			for (int j = 0; j < eventIdNodes.getLength(); j++) {
-				int eventId = Integer.parseInt(eventIdNodes.item(j).getTextContent());
-
-				Contact.addContactEvent(contacts, contactId, events, eventId);
-			}
-		}
+	    	eventRoot.appendChild(eventElement);
+	    }
 	}
 }
