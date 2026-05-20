@@ -64,13 +64,9 @@ public class Contact implements Comparable<Contact> {
 		this.phoneNumber = phoneNumber;
 	}
 	
-	public void setPhoneNumber(String phoneNumberString) {
+	public void setPhoneNumber(String phoneNumberString) throws NumberParseException {
 		PhoneNumberUtil util = PhoneNumberUtil.getInstance();
-		try {
-			this.phoneNumber = util.parse(phoneNumberString, null);
-		} catch (NumberParseException e) {
-	    	throw new IllegalArgumentException("Invalid phone number: " + phoneNumberString);
-		}
+		this.phoneNumber = util.parse(phoneNumberString, null);
 	}
 
 	public InternetAddress getMail() {
@@ -81,12 +77,8 @@ public class Contact implements Comparable<Contact> {
 	    this.mail = mail;
 	}
 
-	public void setMail(String mailString) {
-	    try {
-	    	this.mail = new InternetAddress(mailString);
-	    } catch (AddressException e) {
-	    	throw new IllegalArgumentException("Invalid mail: " + mailString);
-	    }
+	public void setMail(String mailString) throws AddressException {
+		this.mail = new InternetAddress(mailString);
 	}
 
 	public ArrayList<Event> getContactEvents() {
@@ -99,99 +91,6 @@ public class Contact implements Comparable<Contact> {
 
 	public void addContactEvent(Event event) {
 		this.contactEvents.add(event);
-	}
-	public static void addContactEvent(ArrayList<Contact> contacts, int contactId, Event event) {
-		Contact.getContact(contacts, contactId).addContactEvent(event);
-	}
-
-	public static void addContactEvent(ArrayList<Contact> contacts, int contactId, ArrayList<Event> events, int eventId) {
-		Contact contact = Contact.getContact(contacts, contactId);
-		Event event = Event.getEvent(events, eventId);
-
-		if (contact == null || event == null) {
-			return;
-		}
-		contact.addContactEvent(event);
-		event.addEventContact(contact);
-	}
-	
-	public static Contact getContact(ArrayList<Contact> contacts, int id) {
-		for (Contact c : contacts) {
-			if (c.getId() == id) {
-				return c;
-			}
-		}
-		return null;
-	}
-	
-	public static void printContacts(ArrayList<Contact> contacts) {
-		for (Contact c : contacts) {
-			System.out.println(c);
-		}
-	}
-	public static void addContact(ArrayList<Contact> contacts, String name, String surname, Phonenumber.PhoneNumber phoneNumber, InternetAddress mail) {
-		for (Contact c : contacts) {
-			if (c.getPhoneNumber().equals(phoneNumber)) {
-				System.out.println("Kontakt o takim nr tel istnieje.");
-				System.out.println(c);
-				return;
-			}
-		}
-		
-		int newId = 1;
-		for (Contact c : contacts) {
-			if (c.getId() >= newId) {
-				newId = c.getId() + 1;
-			}
-		}
-		
-		contacts.add(new Contact(newId, name, surname, phoneNumber, mail));
-	}
-
-	public static void deleteContactById(ArrayList<Contact> contacts, int id) {
-		for (int i = 0; i < contacts.size(); i++) {
-			if (contacts.get(i).getId() == id) {
-				contacts.remove(i);
-				System.out.println("Usunięto kontakt o id: " + id);
-				return;
-			}
-		}
-		System.out.println("Brak kontaktu o id: " + id);
-	}
-	
-	public static void editContact(ArrayList<Contact> contacts, int id, String newName, String newSurname, Phonenumber.PhoneNumber newPhoneNumber, InternetAddress newMail) {
-		for (Contact contact : contacts) {
-			if (contact.getId() == id) {
-				
-				String oldName = contact.getName();
-				String oldSurname = contact.getSurname();
-				Phonenumber.PhoneNumber oldPhoneNumber = contact.getPhoneNumber();
-	            InternetAddress oldMail = contact.getMail();
-
-				for (Contact other : contacts) {
-					if (other.getPhoneNumber().equals(newPhoneNumber) && other.getId() != id) {
-						System.out.println("A contact with this phone number already exists.");
-						System.out.println("Existing contact:");
-						System.out.println(other);
-						return;
-					}
-				}
-				
-				System.out.println("Contact before edit:");
-				System.out.println("[Contact] Id: " + contact.getId() + " Name: " + oldName + " Surname: " + oldSurname + " Phone number: " + oldPhoneNumber + " Mail: " + oldMail);
-				
-				contact.setName(newName);
-				contact.setSurname(newSurname);
-				contact.setPhoneNumber(newPhoneNumber);
-			    contact.setMail(newMail);
-
-				System.out.println("Contact after edit:");
-				System.out.println(contact);
-				return;
-			}
-		}
-
-		System.out.println("Contact with id " + id + " not found.");
 	}
 	
 	@Override

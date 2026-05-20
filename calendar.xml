@@ -75,18 +75,10 @@
             <id>11</id>
             <name>Krzysztof Super</name>
             <surname>Dąbrowski</surname>
-            <phoneNumber>+48578901234</phoneNumber>
+            <phoneNumber>+48578001234</phoneNumber>
             <mail>krzysztof@onet.pl</mail>
             <contactEvents>
                 <eventId>1</eventId>
-                <eventId>2</eventId>
-                <eventId>3</eventId>
-                <eventId>4</eventId>
-                <eventId>5</eventId>
-                <eventId>6</eventId>
-                <eventId>7</eventId>
-                <eventId>8</eventId>
-                <eventId>9</eventId>
                 <eventId>10</eventId>
             </contactEvents>
         </contact>
@@ -108,8 +100,8 @@
             <phoneNumber>+48946741234</phoneNumber>
             <mail>lubomir@wp.pl</mail>
             <contactEvents>
-                <eventId>7</eventId>
                 <eventId>10</eventId>
+                <eventId>7</eventId>
             </contactEvents>
         </contact>
     </contacts>
@@ -128,27 +120,18 @@
             <date>2026-01-11T10:30</date>
             <description>Telefon do Anny</description>
             <mapUri>https://maps.app.goo.gl/a9xJUn3aTCgQWSyFA</mapUri>
-            <eventContacts>
-                <contactId>11</contactId>
-            </eventContacts>
         </event>
         <event>
             <id>3</id>
             <date>2026-01-12T12:00</date>
             <description>Wysyłka</description>
             <mapUri>https://maps.app.goo.gl/a9xJUn3aTCgQWSyFA</mapUri>
-            <eventContacts>
-                <contactId>11</contactId>
-            </eventContacts>
         </event>
         <event>
             <id>4</id>
             <date>2026-01-13T14:15</date>
             <description>Kino</description>
             <mapUri>https://maps.app.goo.gl/a9xJUn3aTCgQWSyFA</mapUri>
-            <eventContacts>
-                <contactId>11</contactId>
-            </eventContacts>
         </event>
         <event>
             <id>5</id>
@@ -156,7 +139,6 @@
             <description>Omówienie projektu</description>
             <mapUri>https://maps.app.goo.gl/a9xJUn3aTCgQWSyFA</mapUri>
             <eventContacts>
-                <contactId>11</contactId>
                 <contactId>12</contactId>
             </eventContacts>
         </event>
@@ -165,9 +147,6 @@
             <date>2026-01-15T08:45</date>
             <description>Zapłacić</description>
             <mapUri>https://maps.app.goo.gl/a9xJUn3aTCgQWSyFA</mapUri>
-            <eventContacts>
-                <contactId>11</contactId>
-            </eventContacts>
         </event>
         <event>
             <id>7</id>
@@ -175,7 +154,6 @@
             <description>Rozmowa o prace</description>
             <mapUri>https://maps.app.goo.gl/a9xJUn3aTCgQWSyFA</mapUri>
             <eventContacts>
-                <contactId>11</contactId>
                 <contactId>12</contactId>
                 <contactId>13</contactId>
             </eventContacts>
@@ -185,18 +163,12 @@
             <date>2026-01-17T13:10</date>
             <description>Wizyta u lekarza</description>
             <mapUri>https://maps.app.goo.gl/a9xJUn3aTCgQWSyFA</mapUri>
-            <eventContacts>
-                <contactId>11</contactId>
-            </eventContacts>
         </event>
         <event>
             <id>9</id>
             <date>2026-01-18T15:40</date>
             <description>Terminu projektu</description>
             <mapUri>https://maps.app.goo.gl/a9xJUn3aTCgQWSyFA</mapUri>
-            <eventContacts>
-                <contactId>11</contactId>
-            </eventContacts>
         </event>
         <event>
             <id>10</id>

@@ -12,150 +12,142 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class DbManager {
-    public static Connection connect() throws Exception {
-        String url = "jdbc:sqlite:calendar.db";
-        return DriverManager.getConnection(url);
-    }
+	public static Connection connect() throws Exception {
+		String url = "jdbc:sqlite:calendar.db";
+		return DriverManager.getConnection(url);
+	}
 
-    public static void save(ArrayList<Contact> contacts, ArrayList<Event> events) throws Exception {
-        clearTables();
-        saveContacts(contacts);
-        saveEvents(events);
-        saveParticipations(contacts);
-    }
+	public static void save(ContactList contactList, EventList eventList) throws Exception {
+		clearTables();
+		saveContacts(contactList);
+		saveEvents(eventList);
+		saveParticipations(contactList);
+	}
 
-    public static void load(ArrayList<Contact> contacts, ArrayList<Event> events) throws Exception {
-        loadContacts(contacts);
-        loadEvents(events);
-        loadParticipations(contacts, events);
-    }
+	public static void load(ContactList contactList, EventList eventList) throws Exception {
+		loadContacts(contactList);
+		loadEvents(eventList);
+		loadParticipations(contactList, eventList);
+	}
 
-    private static void clearTables() throws Exception {
-        Connection connection = connect();
-        Statement statement = connection.createStatement();
+	private static void clearTables() throws Exception {
+		Connection connection = connect();
+		Statement statement = connection.createStatement();
 
-        statement.executeUpdate("DELETE FROM Contacts");
-        statement.executeUpdate("DELETE FROM Events");
-        statement.executeUpdate("DELETE FROM Participations");
+		statement.executeUpdate("DELETE FROM Contacts");
+		statement.executeUpdate("DELETE FROM Events");
+		statement.executeUpdate("DELETE FROM Participations");
 
-        statement.close();
-        connection.close();
-    }
+		statement.close();
+		connection.close();
+	}
 
-    private static void saveContacts(ArrayList<Contact> contacts) throws Exception {
-        Connection connection = connect();
+	private static void saveContacts(ContactList contactList) throws Exception {
+		Connection connection = connect();
 
-        String sql = "INSERT INTO Contacts (id, name, surname, phone_number, mail) VALUES (?, ?, ?, ?, ?)";
-        PreparedStatement statement = connection.prepareStatement(sql);
+		String sql = "INSERT INTO Contacts (id, name, surname, phone_number, mail) VALUES (?, ?, ?, ?, ?)";
+		PreparedStatement statement = connection.prepareStatement(sql);
 
-        PhoneNumberUtil util = PhoneNumberUtil.getInstance();
+		PhoneNumberUtil util = PhoneNumberUtil.getInstance();
 
-        for (Contact contact : contacts) {
-        	String phoneNumber = util.format(contact.getPhoneNumber(), PhoneNumberUtil.PhoneNumberFormat.E164);
+		for (Contact contact : contactList.getContacts()) {
+			String phoneNumber = util.format(contact.getPhoneNumber(), PhoneNumberUtil.PhoneNumberFormat.E164);
 
-            statement.setInt(1, contact.getId());
-            statement.setString(2, contact.getName());
-            statement.setString(3, contact.getSurname());
-            statement.setString(4, phoneNumber);
-            statement.setString(5, contact.getMail().toString());
+			statement.setInt(1, contact.getId());
+			statement.setString(2, contact.getName());
+			statement.setString(3, contact.getSurname());
+			statement.setString(4, phoneNumber);
+			statement.setString(5, contact.getMail().toString());
 
-            statement.executeUpdate();
-        }
+			statement.executeUpdate();
+		}
 
-        statement.close();
-        connection.close();
-    }
+		statement.close();
+		connection.close();
+	}
 
-    private static void saveEvents(ArrayList<Event> events) throws Exception {
-        Connection connection = connect();
+	private static void saveEvents(EventList eventList) throws Exception {
+		Connection connection = connect();
 
-        String sql = "INSERT INTO Events (id, date, description, map_uri) VALUES (?, ?, ?, ?)";
-        PreparedStatement statement = connection.prepareStatement(sql);
+		String sql = "INSERT INTO Events (id, date, description, map_uri) VALUES (?, ?, ?, ?)";
+		PreparedStatement statement = connection.prepareStatement(sql);
 
-        for (Event event : events) {
-            statement.setInt(1, event.getId());
-            statement.setString(2, event.getDate().toString());
-            statement.setString(3, event.getDescription());
-            statement.setString(4, event.getMapUri().toString());
+		for (Event event : eventList.getEvents()) {
+			statement.setInt(1, event.getId());
+			statement.setString(2, event.getDate().toString());
+			statement.setString(3, event.getDescription());
+			statement.setString(4, event.getMapUri().toString());
 
-            statement.executeUpdate();
-        }
+			statement.executeUpdate();
+		}
 
-        statement.close();
-        connection.close();
-    }
-    
-    private static void saveParticipations(ArrayList<Contact> contacts) throws Exception {
-        Connection connection = connect();
+		statement.close();
+		connection.close();
+	}
 
-        String sql = "INSERT INTO Participations (contact_id, event_id) VALUES (?, ?)";
-        PreparedStatement statement = connection.prepareStatement(sql);
+	private static void saveParticipations(ContactList contactList) throws Exception {
+		Connection connection = connect();
 
-        for (Contact contact : contacts) {
-            statement.setInt(1, contact.getId());
-            for (Event contactEvent : contact.getContactEvents()) {
-            	statement.setInt(2, contactEvent.getId());
-            	statement.executeUpdate();
-            }
-        }
+		String sql = "INSERT INTO Participations (contact_id, event_id) VALUES (?, ?)";
+		PreparedStatement statement = connection.prepareStatement(sql);
 
-        statement.close();
-        connection.close();
-    }
+		for (Contact contact : contactList.getContacts()) {
+			statement.setInt(1, contact.getId());
+			for (Event contactEvent : contact.getContactEvents()) {
+				statement.setInt(2, contactEvent.getId());
+				statement.executeUpdate();
+			}
+		}
 
-    private static void loadContacts(ArrayList<Contact> contacts) throws Exception {
-        Connection connection = connect();
-        Statement statement = connection.createStatement();
+		statement.close();
+		connection.close();
+	}
 
-        ResultSet rs = statement.executeQuery("SELECT * FROM Contacts");
-        PhoneNumberUtil util = PhoneNumberUtil.getInstance();
+	private static void loadContacts(ContactList contactList) throws Exception {
+		Connection connection = connect();
+		Statement statement = connection.createStatement();
 
-        while (rs.next()) {
-            contacts.add(new Contact(
-            		rs.getInt("id"),
-            		rs.getString("name"),
-            		rs.getString("surname"),
-                    util.parse(rs.getString("phone_number"), null),
-                    new InternetAddress(rs.getString("mail"))
-                    ));
-        }
+		ResultSet rs = statement.executeQuery("SELECT * FROM Contacts");
+		PhoneNumberUtil util = PhoneNumberUtil.getInstance();
 
-        rs.close();
-        statement.close();
-        connection.close();
-    }
+		while (rs.next()) {
+			contactList.getContacts().add(new Contact(rs.getInt("id"), rs.getString("name"), rs.getString("surname"),
+					util.parse(rs.getString("phone_number"), null), new InternetAddress(rs.getString("mail"))));
+		}
 
-    private static void loadEvents(ArrayList<Event> events) throws Exception {
-        Connection connection = connect();
-        Statement statement = connection.createStatement();
+		rs.close();
+		statement.close();
+		connection.close();
+	}
 
-        ResultSet rs = statement.executeQuery("SELECT * FROM Events");
+	private static void loadEvents(EventList eventList) throws Exception {
+		Connection connection = connect();
+		Statement statement = connection.createStatement();
 
-        while (rs.next()) {
-            events.add(new Event(
-            		rs.getInt("id"),
-	        		LocalDateTime.parse(rs.getString("date")),
-	                rs.getString("description"),
-	                new URI(rs.getString("map_uri"))
-	                ));
-        }
+		ResultSet rs = statement.executeQuery("SELECT * FROM Events");
 
-        rs.close();
-        statement.close();
-        connection.close();
-    }
-    private static void loadParticipations(ArrayList<Contact> contacts, ArrayList<Event> events) throws Exception {
-        Connection connection = connect();
-        Statement statement = connection.createStatement();
+		while (rs.next()) {
+			eventList.getEvents().add(new Event(rs.getInt("id"), LocalDateTime.parse(rs.getString("date")),
+					rs.getString("description"), new URI(rs.getString("map_uri"))));
+		}
 
-        ResultSet rs = statement.executeQuery("SELECT * FROM Participations");
+		rs.close();
+		statement.close();
+		connection.close();
+	}
 
-        while (rs.next()) {
-    		Contact.addContactEvent(contacts, rs.getInt("contact_id"), events, rs.getInt("event_id"));
-        }
+	private static void loadParticipations(ContactList contactList, EventList eventList) throws Exception {
+		Connection connection = connect();
+		Statement statement = connection.createStatement();
 
-        rs.close();
-        statement.close();
-        connection.close();
-    }
+		ResultSet rs = statement.executeQuery("SELECT * FROM Participations");
+
+		while (rs.next()) {
+			contactList.addContactEvent(rs.getInt("contact_id"), eventList, rs.getInt("event_id"));
+		}
+
+		rs.close();
+		statement.close();
+		connection.close();
+	}
 }

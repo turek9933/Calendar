@@ -68,13 +68,9 @@ public class Event implements Comparable<Event> {
 		this.mapUri = mapUri;
 	}
 
-	public void setMapUri(String mapUriString) {
-		try {
-			this.mapUri = new URI(mapUriString);
-		} catch (URISyntaxException e) {
-			throw new IllegalArgumentException("Invalid URI string: " + mapUriString);
-		}
-	}
+	public void setMapUri(String mapUriString) throws Exception {
+        this.mapUri = new URI(mapUriString);
+    }
 
 	public ArrayList<Contact> getEventContacts() {
 		return eventContacts;
@@ -95,71 +91,6 @@ public class Event implements Comparable<Event> {
 			}
 		}
 		return null;
-	}
-
-	public static void addEventContact(ArrayList<Event> events, int eventId, Contact contact) {
-		Event.getEvent(events, eventId).addEventContact(contact);
-	}
-	public static void addEventContact(ArrayList<Event> events, int eventId, ArrayList<Contact> contacts, int contactId) {
-		Event event = Event.getEvent(events, eventId);
-		Contact contact = Contact.getContact(contacts, contactId);
-
-		if (contact == null || event == null) {
-			return;
-		}
-		event.addEventContact(contact);
-		contact.addContactEvent(event);
-	}
-
-	public static void printEvents(ArrayList<Event> events) {
-		for (Event e : events) {
-			System.out.println(e);
-		}
-	}
-
-	public static void addEvent(ArrayList<Event> events, LocalDateTime date, String description, URI mapUri) {
-		int newId = 1;
-		for (Event e : events) {
-			if (e.getId() >= newId) {
-				newId = e.getId() + 1;
-			}
-		}
-		events.add(new Event(newId, date, description, mapUri));
-	}
-
-	public static void deleteEventById(ArrayList<Event> events, int id) {
-		for (int i = 0; i < events.size(); i++) {
-			if (events.get(i).getId() == id) {
-				events.remove(i);
-				System.out.println("Usunięto zdarzenie o id: " + id);
-				return;
-			}
-		}
-		System.out.println("Brak zdarzenia o id: " + id);
-	}
-	
-	public static void editEvent(ArrayList<Event> events, int id, LocalDateTime newDate, String newDescription, URI newMapUri) {
-		for (Event event : events) {
-			if (event.getId() == id) {
-
-				LocalDateTime oldDate = event.getDate();
-				String oldDescription = event.getDescription();
-				URI oldMapUri = event.getMapUri();
-
-				System.out.println("Event before edit:");
-				System.out.println("[Event] Id: " + event.getId() + " Date: " + oldDate + " Description: " + oldDescription  + " Adres: " + oldMapUri);
-
-				event.setDate(newDate);
-				event.setDescription(newDescription);
-				event.setMapUri(newMapUri);
-
-				System.out.println("Event after edit:");
-				System.out.println(event);
-				return;
-			}
-		}
-
-		System.out.println("Event with id " + id + " not found.");
 	}
 	
 	@Override

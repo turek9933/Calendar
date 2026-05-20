@@ -19,20 +19,20 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 public class XmlManager {
-	public static void load(ArrayList<Contact> contacts, ArrayList<Event> events) throws Exception {
-		XmlManager.load(contacts, events, "calendar.xml");
+	public static void load(ContactList contactList, EventList eventList) throws Exception {
+		XmlManager.load(contactList, eventList, "calendar.xml");
 	}
 
-	public static void load(ArrayList<Contact> contacts, ArrayList<Event> events, String fileName) throws Exception {
+	public static void load(ContactList contactList, EventList eventList, String fileName) throws Exception {
 		Document doc = createDocument(fileName);
 		
-		loadContactArray(contacts, doc);
-		loadEventArray(events, doc);
+		loadContactArray(contactList, doc);
+		loadEventArray(eventList, doc);
 
-		loadLinksContactAndEvents(contacts, events, doc);
+		loadLinksContactAndEvents(contactList, eventList, doc);
 	}
 	
-	public static void save(ArrayList<Contact> contacts, ArrayList<Event> events) throws Exception {
+	public static void save(ContactList contactList, EventList eventList) throws Exception {
 	    Document doc = createDocument();
 
 	    // Stworzenie elementu głównego i dodanie go do dokumentu
@@ -40,8 +40,8 @@ public class XmlManager {
 	    doc.appendChild(root);
 
 	    // Dodanie elementów kontaktów oraz zdarzeń
-	    saveContacts(contacts, root, doc);
-	    saveEvents(events, root, doc);
+	    saveContacts(contactList, root, doc);
+	    saveEvents(eventList, root, doc);
 
 	    // Renderowanie i zapis drzewa DOM do pliku
 	    TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -70,7 +70,7 @@ public class XmlManager {
 	    return builder.parse(new File(path));
 	}
 
-	private static void loadContactArray(ArrayList<Contact> contacts, Document doc) throws Exception {
+	private static void loadContactArray(ContactList contactList, Document doc) throws Exception {
 		Element contactsElement = (Element) doc.getElementsByTagName("contacts").item(0);
 	    NodeList contactNodes = contactsElement.getElementsByTagName("contact");
 	    
@@ -90,11 +90,11 @@ public class XmlManager {
 			String mailString = contactElement.getElementsByTagName("mail").item(0).getTextContent();
 	    	InternetAddress mail = new InternetAddress(mailString);
 
-	    	contacts.add(new Contact(id, name, surname, phoneNumber, mail));
+	    	contactList.addContact(id, name, surname, phoneNumber, mail);
 	    }
 	}
 
-	private static void loadEventArray(ArrayList<Event> events, Document doc) throws Exception {
+	private static void loadEventArray(EventList eventList, Document doc) throws Exception {
 		Element eventsElement = (Element) doc.getElementsByTagName("events").item(0);
 	    NodeList eventNodes = doc.getElementsByTagName("event");
 	    
@@ -106,10 +106,10 @@ public class XmlManager {
 	    	String description = eventElement.getElementsByTagName("description").item(0).getTextContent();
 	    	URI mapUri = new URI(eventElement.getElementsByTagName("mapUri").item(0).getTextContent());
 
-	    	events.add(new Event(id, date, description, mapUri));
+	    	eventList.addEvent(id, date, description, mapUri);
 	    }
 	}
-	private static void loadLinksContactAndEvents(ArrayList<Contact> contacts, ArrayList<Event> events, Document doc) {
+	private static void loadLinksContactAndEvents(ContactList contactList, EventList eventList, Document doc) {
 		Element contactsElement = (Element) doc.getElementsByTagName("contacts").item(0);
 	    NodeList contactNodes = contactsElement.getElementsByTagName("contact");
 
@@ -128,19 +128,19 @@ public class XmlManager {
 	    	
 	    	for (int j = 0; j < eventIdNodes.getLength(); j++) {
     			int eventId = Integer.parseInt(eventIdNodes.item(j).getTextContent());
-	    		Contact.addContactEvent(contacts, contactId, events, eventId);
+    			contactList.addContactEvent(contactId, eventList, eventId);
 	    	}
 	    }
 	}
 	
-	private static void saveContacts(ArrayList<Contact> contacts, Element root, Document doc) throws Exception {
+	private static void saveContacts(ContactList contactList, Element root, Document doc) throws Exception {
 		Element contactRoot = doc.createElement("contacts");
 		root.appendChild(contactRoot);
 
 		// Konwersja numeru telefonu na Sting
 		PhoneNumberUtil util = PhoneNumberUtil.getInstance();
 
-		for (Contact c : contacts) {
+		for (Contact c : contactList.getContacts()) {
 	    	Element contactElement = doc.createElement("contact");
 
 	    	Element id = doc.createElement("id");
@@ -179,11 +179,11 @@ public class XmlManager {
 	    }
 	}
 
-	private static void saveEvents(ArrayList<Event> events, Element root, Document doc) throws Exception {
+	private static void saveEvents(EventList eventList, Element root, Document doc) throws Exception {
 		Element eventRoot = doc.createElement("events");
 		root.appendChild(eventRoot);
 		
-		for (Event e : events) {
+		for (Event e : eventList.getEvents()) {
 	    	Element eventElement = doc.createElement("event");
 
 	    	Element id = doc.createElement("id");
