@@ -68,7 +68,7 @@ public class Event implements Comparable<Event> {
 		this.mapUri = mapUri;
 	}
 
-	public void setMapUri(String mapUriString) throws Exception {
+	public void setMapUri(String mapUriString) throws URISyntaxException {
         this.mapUri = new URI(mapUriString);
     }
 
