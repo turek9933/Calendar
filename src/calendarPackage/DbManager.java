@@ -9,28 +9,44 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 public class DbManager {
-	public static Connection connect() throws Exception {
-		String url = "jdbc:sqlite:calendar.db";
-		return DriverManager.getConnection(url);
+	private String dbUrl;
+
+	public DbManager(String dbUrl) {
+		this.dbUrl = dbUrl;
 	}
 
-	public static void save(ContactList contactList, EventList eventList) throws Exception {
+	public DbManager() {
+		this("jdbc:sqlite:calendar.db");
+	}
+
+	public String getDbUrl() {
+		return dbUrl;
+	}
+
+	public void setDbUrl(String dbUrl) {
+		this.dbUrl = dbUrl;
+	}
+
+	public Connection connect() throws Exception {
+		return DriverManager.getConnection(dbUrl);
+	}
+
+	public void save(ContactList contactList, EventList eventList) throws Exception {
 		clearTables();
 		saveContacts(contactList);
 		saveEvents(eventList);
 		saveParticipations(contactList);
 	}
 
-	public static void load(ContactList contactList, EventList eventList) throws Exception {
+	public void load(ContactList contactList, EventList eventList) throws Exception {
 		loadContacts(contactList);
 		loadEvents(eventList);
 		loadParticipations(contactList, eventList);
 	}
 
-	private static void clearTables() throws Exception {
+	private void clearTables() throws Exception {
 		Connection connection = connect();
 		Statement statement = connection.createStatement();
 
@@ -42,7 +58,7 @@ public class DbManager {
 		connection.close();
 	}
 
-	private static void saveContacts(ContactList contactList) throws Exception {
+	private void saveContacts(ContactList contactList) throws Exception {
 		Connection connection = connect();
 
 		String sql = "INSERT INTO Contacts (id, name, surname, phone_number, mail) VALUES (?, ?, ?, ?, ?)";
@@ -66,7 +82,7 @@ public class DbManager {
 		connection.close();
 	}
 
-	private static void saveEvents(EventList eventList) throws Exception {
+	private void saveEvents(EventList eventList) throws Exception {
 		Connection connection = connect();
 
 		String sql = "INSERT INTO Events (id, date, description, map_uri) VALUES (?, ?, ?, ?)";
@@ -85,7 +101,7 @@ public class DbManager {
 		connection.close();
 	}
 
-	private static void saveParticipations(ContactList contactList) throws Exception {
+	private void saveParticipations(ContactList contactList) throws Exception {
 		Connection connection = connect();
 
 		String sql = "INSERT INTO Participations (contact_id, event_id) VALUES (?, ?)";
@@ -103,7 +119,7 @@ public class DbManager {
 		connection.close();
 	}
 
-	private static void loadContacts(ContactList contactList) throws Exception {
+	private void loadContacts(ContactList contactList) throws Exception {
 		Connection connection = connect();
 		Statement statement = connection.createStatement();
 
@@ -120,7 +136,7 @@ public class DbManager {
 		connection.close();
 	}
 
-	private static void loadEvents(EventList eventList) throws Exception {
+	private void loadEvents(EventList eventList) throws Exception {
 		Connection connection = connect();
 		Statement statement = connection.createStatement();
 
@@ -136,7 +152,7 @@ public class DbManager {
 		connection.close();
 	}
 
-	private static void loadParticipations(ContactList contactList, EventList eventList) throws Exception {
+	private void loadParticipations(ContactList contactList, EventList eventList) throws Exception {
 		Connection connection = connect();
 		Statement statement = connection.createStatement();
 

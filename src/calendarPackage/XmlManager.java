@@ -19,20 +19,34 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 public class XmlManager {
-	public static void load(ContactList contactList, EventList eventList) throws Exception {
-		XmlManager.load(contactList, eventList, "calendar.xml");
+	private String fileName;
+
+	public XmlManager(String fileName) {
+		this.fileName = fileName;
 	}
 
-	public static void load(ContactList contactList, EventList eventList, String fileName) throws Exception {
+	public XmlManager() {
+		this("calendar.xml");
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public void load(ContactList contactList, EventList eventList) throws Exception {
 		Document doc = createDocument(fileName);
-		
+
 		loadContactArray(contactList, doc);
 		loadEventArray(eventList, doc);
 
 		loadLinksContactAndEvents(contactList, eventList, doc);
 	}
-	
-	public static void save(ContactList contactList, EventList eventList) throws Exception {
+
+	public void save(ContactList contactList, EventList eventList) throws Exception {
 	    Document doc = createDocument();
 
 	    // Stworzenie elementu głównego i dodanie go do dokumentu
@@ -52,25 +66,25 @@ public class XmlManager {
 	    transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 
 	    DOMSource source = new DOMSource(doc);
-		StreamResult result = new StreamResult(new File("calendar.xml"));
+		StreamResult result = new StreamResult(new File(fileName));
 
 	    transformer.transform(source, result);
 	}
-	
-	private static Document createDocument() throws Exception {
-	    // Stworzenie pustego drzewa DOM - obiektowy model dokumentu
+
+	private Document createDocument() throws Exception {
 	    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 	    DocumentBuilder builder = factory.newDocumentBuilder();
 	    return builder.newDocument();
 	}
-	private static Document createDocument(String path) throws Exception {
-	    // Stworzenie pustego drzewa DOM - obiektowy model dokumentu i wczytanie danych z pliku
+
+	private Document createDocument(String path) throws Exception {
+		// Stworzenie pustego drzewa DOM - obiektowy model dokumentu i wczytanie danych z pliku
 	    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 	    DocumentBuilder builder = factory.newDocumentBuilder();
 	    return builder.parse(new File(path));
 	}
 
-	private static void loadContactArray(ContactList contactList, Document doc) throws Exception {
+	private void loadContactArray(ContactList contactList, Document doc) throws Exception {
 		Element contactsElement = (Element) doc.getElementsByTagName("contacts").item(0);
 	    NodeList contactNodes = contactsElement.getElementsByTagName("contact");
 	    
@@ -94,7 +108,7 @@ public class XmlManager {
 	    }
 	}
 
-	private static void loadEventArray(EventList eventList, Document doc) throws Exception {
+	private void loadEventArray(EventList eventList, Document doc) throws Exception {
 		Element eventsElement = (Element) doc.getElementsByTagName("events").item(0);
 	    NodeList eventNodes = doc.getElementsByTagName("event");
 	    
@@ -109,7 +123,7 @@ public class XmlManager {
 	    	eventList.addEvent(id, date, description, mapUri);
 	    }
 	}
-	private static void loadLinksContactAndEvents(ContactList contactList, EventList eventList, Document doc) {
+	private void loadLinksContactAndEvents(ContactList contactList, EventList eventList, Document doc) {
 		Element contactsElement = (Element) doc.getElementsByTagName("contacts").item(0);
 	    NodeList contactNodes = contactsElement.getElementsByTagName("contact");
 
@@ -133,7 +147,7 @@ public class XmlManager {
 	    }
 	}
 	
-	private static void saveContacts(ContactList contactList, Element root, Document doc) throws Exception {
+	private void saveContacts(ContactList contactList, Element root, Document doc) throws Exception {
 		Element contactRoot = doc.createElement("contacts");
 		root.appendChild(contactRoot);
 
@@ -179,7 +193,7 @@ public class XmlManager {
 	    }
 	}
 
-	private static void saveEvents(EventList eventList, Element root, Document doc) throws Exception {
+	private void saveEvents(EventList eventList, Element root, Document doc) throws Exception {
 		Element eventRoot = doc.createElement("events");
 		root.appendChild(eventRoot);
 		

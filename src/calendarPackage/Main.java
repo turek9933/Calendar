@@ -16,7 +16,11 @@ public class Main {
 		dataInit();
 		ContactList contactList = new ContactList();
 		EventList eventList = new EventList();
-		DbManager.load(contactList, eventList);
+
+		DbManager dbManager = new DbManager();
+		XmlManager xmlManager = new XmlManager();
+
+		dbManager.load(contactList, eventList);
 
 		System.out.println("Dane startowe wczytane z DB:");
 		System.out.println(contactList);
@@ -24,41 +28,41 @@ public class Main {
 
 		System.out.println();
 		System.out.println("Zapis do pliku XML zmodyfikowanych danych");
-		XmlManager.save(contactList, eventList);
+		xmlManager.save(contactList, eventList);
 
 		System.out.println();
 		System.out.println("Odczyt z pliku XML zmodyfikowanych danych");
 		contactList.clearContacts();
 		eventList.clearEvents();
-		XmlManager.load(contactList, eventList);
+		xmlManager.load(contactList, eventList);
 		System.out.println(contactList);
 
 		System.out.println();
 		System.out.println("Dodanie zdarzenia");
 		eventList.addEvent(LocalDateTime.of(2027, 2, 13, 17, 21), "Zakupy", new URI("https://maps.app.goo.gl/2Qy5tNCCtX26HgAt9"));
 		System.out.println(eventList);
-		
+
 		System.out.println();
 		System.out.println("Usuwanie zdarzenia o id 2");
 		eventList.deleteEventById(2);
 		System.out.println(eventList);
-		
+
 		System.out.println();
 		System.out.println("Edycja zdarzenia o id 3");
 		eventList.editEvent(3, LocalDateTime.of(2027, 9, 12, 15, 30), "tenis", new URI("https://maps.app.goo.gl/2Qy5tNCCtX26HgAt9"));
 		System.out.println();
 		System.out.println(eventList);
-		
+
 		System.out.println();
 		System.out.println("Zapis do bazy");
-		DbManager.save(contactList, eventList);
+		dbManager.save(contactList, eventList);
 		System.out.println("Ukończony zapis do bazy");
 	}
 
 	public static void dataInit() throws Exception {
 		ContactList contacts = new ContactList();
 		EventList events = new EventList();
-		
+
 		contacts.addContact(1, "Anna", "Nowak", new Phonenumber.PhoneNumber().setCountryCode(48).setNationalNumber(654564567), new InternetAddress("anna@onet.pl"));
         contacts.addContact(2, "Jan", "Kowalski", new Phonenumber.PhoneNumber().setCountryCode(48).setNationalNumber(501234567), new InternetAddress("jana@onet.pl"));
         contacts.addContact(3, "Piotr", "Wiśniewski", new Phonenumber.PhoneNumber().setCountryCode(48).setNationalNumber(503456789), new InternetAddress("piotr@onet.pl"));
@@ -88,11 +92,12 @@ public class Main {
 		contacts.addContact(12, "Andrzej", "Chrząszcz", new Phonenumber.PhoneNumber().setCountryCode(48).setNationalNumber(858941234), new InternetAddress("andrzej@onet.pl"));
 		contacts.addContactEvent(12, events.getEvents().get(4));
 		contacts.addContactEvent(12, events.getEvents().get(6));
-		
+
 		contacts.addContact(13, "Michaś", "Lubomir", new Phonenumber.PhoneNumber().setCountryCode(48).setNationalNumber(946741234), new InternetAddress("lubomir@wp.pl"));
 		contacts.addContactEvent(13, events.getEvents().get(9));
 		contacts.addContactEvent(13, events.getEvents().get(6));
-        
-		DbManager.save(contacts, events);
+
+		DbManager dbManager = new DbManager();
+		dbManager.save(contacts, events);
 	}
 }
